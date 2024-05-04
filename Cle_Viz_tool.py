@@ -60,8 +60,8 @@ left_column.image('./Image/SGC35_red 3.png')
 # Lưu trữ chỉ số index của dự án được chọn
 tool_num = tools.index(tool) + 1
 
-# if tool_num == 1:
-#     st.write('# Làm sạch dữ liệu')
+if tool_num == 1:
+    st.write('# Làm sạch dữ liệu')
     
 #     cleaning_tool = left_column.selectbox(":red[**Chọn ứng dụng muốn sử dụng:**]", cleaning_tools)
 #     tool_num_cle = cleaning_tools.index(cleaning_tool) + 1
