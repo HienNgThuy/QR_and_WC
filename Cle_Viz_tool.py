@@ -37,7 +37,7 @@ st.title(':rainbow[Một số công cụ làm sạch dữ liệu cơ bản] :tul
 
 # st.title(':blue[Một số công cụ làm sạch và trực quan hóa dữ liệu bằng Python]')
 
-st.snow()
+# st.snow()
 
 # Tạo cột bên trái cho menu
 left_column = st.sidebar
@@ -167,13 +167,13 @@ elif tool_num_viz == 2:
         # st.image('https://matplotlib.org/stable/_images/sphx_glr_colormaps_005.png')
         # st.image('https://matplotlib.org/stable/_images/sphx_glr_colormaps_006.png')
         # st.image('https://matplotlib.org/stable/_images/sphx_glr_colormaps_007.png')
-        st.image('./Image/sphx_glr_colormaps_001.png')
-        st.image('./Image/sphx_glr_colormaps_002.png')
-        st.image('./Image/sphx_glr_colormaps_003.png')
-        st.image('./Image/sphx_glr_colormaps_004.png')
-        st.image('./Image/sphx_glr_colormaps_005.png')
-        st.image('./Image/sphx_glr_colormaps_006.png')
-        st.image('./Image/sphx_glr_colormaps_007.png')
+        # st.image('./Image/sphx_glr_colormaps_001.png')
+        # st.image('./Image/sphx_glr_colormaps_002.png')
+        # st.image('./Image/sphx_glr_colormaps_003.png')
+        # st.image('./Image/sphx_glr_colormaps_004.png')
+        # st.image('./Image/sphx_glr_colormaps_005.png')
+        # st.image('./Image/sphx_glr_colormaps_006.png')
+        # st.image('./Image/sphx_glr_colormaps_007.png')
         st.write('***Nguồn:*** *https://matplotlib.org/stable/users/explain/colors/colormaps.html*')
 
     with st.expander("**Bấm để xem ví dụ của các bảng màu**"):
