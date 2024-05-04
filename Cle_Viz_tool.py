@@ -37,7 +37,7 @@ def to_excel(df: pd.DataFrame):
 
 st.title(':blue[Một số công cụ làm sạch và trực quan hóa dữ liệu bằng Python]')
 
-# st.snow()
+st.snow()
 
 # Tạo cột bên trái cho menu
 left_column = st.sidebar
@@ -60,579 +60,579 @@ left_column.image('./Image/SGC35_red 3.png')
 # Lưu trữ chỉ số index của dự án được chọn
 tool_num = tools.index(tool) + 1
 
-if tool_num == 1:
-    st.write('# Làm sạch dữ liệu')
+# if tool_num == 1:
+#     st.write('# Làm sạch dữ liệu')
     
-    cleaning_tool = left_column.selectbox(":red[**Chọn ứng dụng muốn sử dụng:**]", cleaning_tools)
-    tool_num_cle = cleaning_tools.index(cleaning_tool) + 1
+#     cleaning_tool = left_column.selectbox(":red[**Chọn ứng dụng muốn sử dụng:**]", cleaning_tools)
+#     tool_num_cle = cleaning_tools.index(cleaning_tool) + 1
 
-    if tool_num_cle == 1:
-        st.header('Nhận diện và làm sạch outliers')
+#     if tool_num_cle == 1:
+#         st.header('Nhận diện và làm sạch outliers')
             
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')
         
-        st.dataframe(data.head( ))
+#         st.dataframe(data.head( ))
         
-        st.write('**Dữ liệu bao gồm các cột:**')
-        st.code(data.columns.tolist())
+#         st.write('**Dữ liệu bao gồm các cột:**')
+#         st.code(data.columns.tolist())
         
-        st.write('#### Chọn cột cần nhận diện outliers:')
+#         st.write('#### Chọn cột cần nhận diện outliers:')
         
-        column = st.selectbox('Tên cột', data.columns.tolist())
+#         column = st.selectbox('Tên cột', data.columns.tolist())
         
-        st.write('**Xem xét thống kê nhanh**')
+#         st.write('**Xem xét thống kê nhanh**')
         
-        st.dataframe(data[[column]].describe().applymap(lambda x: f"{x:0.2f}").T)
+#         st.dataframe(data[[column]].describe().applymap(lambda x: f"{x:0.2f}").T)
         
-        st.write('**Xem xét phân bố của dữ liệu của dữ liệu**')
+#         st.write('**Xem xét phân bố của dữ liệu của dữ liệu**')
         
-        st.write('***Boxplot***')
+#         st.write('***Boxplot***')
         
-        fig1 = px.box(data, x=column, color_discrete_sequence =['#BF3131'])
+#         fig1 = px.box(data, x=column, color_discrete_sequence =['#BF3131'])
 
-        # ## loop through the values you want to label and add them as annotations
-        # for x in zip(["min","q1","med","q3","max"],data.quantile([0,0.25,0.5,0.75,1]).iloc[:,0].values):
-        #     fig1.add_annotation(
-        #         x=x[1],
-        #         y=0.3,
-        #         text=x[0] + ": " + str(x[1]),
-        #         showarrow=False
-        #         )
-        st.plotly_chart(fig1)
+#         # ## loop through the values you want to label and add them as annotations
+#         # for x in zip(["min","q1","med","q3","max"],data.quantile([0,0.25,0.5,0.75,1]).iloc[:,0].values):
+#         #     fig1.add_annotation(
+#         #         x=x[1],
+#         #         y=0.3,
+#         #         text=x[0] + ": " + str(x[1]),
+#         #         showarrow=False
+#         #         )
+#         st.plotly_chart(fig1)
         
-        st.write('***Top 10 giá trị xuất hiện nhiều nhất***')
+#         st.write('***Top 10 giá trị xuất hiện nhiều nhất***')
         
-        top_10 = data[column].value_counts().iloc[:10].rename_axis('Giá trị').reset_index()
+#         top_10 = data[column].value_counts().iloc[:10].rename_axis('Giá trị').reset_index()
         
-        top_10['Giá trị'] = top_10['Giá trị'].astype('category')
+#         top_10['Giá trị'] = top_10['Giá trị'].astype('category')
         
-        top_10.rename(columns = {'count':'Số lần'}, inplace = True) 
+#         top_10.rename(columns = {'count':'Số lần'}, inplace = True) 
         
-        st.dataframe(top_10.T)
+#         st.dataframe(top_10.T)
         
-        fig2 = px.bar(top_10, y='Số lần', x='Giá trị', text_auto='Auto', color_discrete_sequence =['#7D0A0A'])
+#         fig2 = px.bar(top_10, y='Số lần', x='Giá trị', text_auto='Auto', color_discrete_sequence =['#7D0A0A'])
         
-        st.plotly_chart(fig2)     
+#         st.plotly_chart(fig2)     
         
-        st.write('## Nhận diện outliers')   
+#         st.write('## Nhận diện outliers')   
 
-        st.write(''':red[**Lưu ý:**] Sau đây là 3 trong rất nhiều cách nhận diện outliers, tùy theo mục đích, loại dữ liệu và số lượng outliers sẽ áp dụng các cách thức khác nhau để làm việc với dữ liệu chứa outliers (có thể loại bỏ tất cả, loại bỏ 1 phần hoặc giữ nguyên):
-    * **Cách 1:** Nhận diện outliers dựa trên **Độ lệch chuẩn**, tính từ trung bình của dữ liệu, nếu giá trị nào cao hơn  Độ lệch chuẩn 3 lần sẽ là outliers.
-    * **Cách 2:** Nhận diện outliers dựa trên **Bách phân vị**, bất kỳ giá trị nào nằm ngoài khoảng Bách phân vị thứ 1 và 99 sẽ là outliers.
-    * **Cách 3:** Nhận diện outliers dựa trên **Tứ phân vị**, bất kỳ giá trị nào nằm ngoài khoảng Tứ phân vị sẽ là outliers.''')
-        # https://thongke.cesti.gov.vn/dich-vu-thong-ke/tai-lieu-phan-tich-thong-ke/845-thong-ke-mo-ta-trong-nghien-cuu-dai-luong-do-phan-tan
-        #region
-        #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#END#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-        #endregion
+#         st.write(''':red[**Lưu ý:**] Sau đây là 3 trong rất nhiều cách nhận diện outliers, tùy theo mục đích, loại dữ liệu và số lượng outliers sẽ áp dụng các cách thức khác nhau để làm việc với dữ liệu chứa outliers (có thể loại bỏ tất cả, loại bỏ 1 phần hoặc giữ nguyên):
+#     * **Cách 1:** Nhận diện outliers dựa trên **Độ lệch chuẩn**, tính từ trung bình của dữ liệu, nếu giá trị nào cao hơn  Độ lệch chuẩn 3 lần sẽ là outliers.
+#     * **Cách 2:** Nhận diện outliers dựa trên **Bách phân vị**, bất kỳ giá trị nào nằm ngoài khoảng Bách phân vị thứ 1 và 99 sẽ là outliers.
+#     * **Cách 3:** Nhận diện outliers dựa trên **Tứ phân vị**, bất kỳ giá trị nào nằm ngoài khoảng Tứ phân vị sẽ là outliers.''')
+#         # https://thongke.cesti.gov.vn/dich-vu-thong-ke/tai-lieu-phan-tich-thong-ke/845-thong-ke-mo-ta-trong-nghien-cuu-dai-luong-do-phan-tan
+#         #region
+#         #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#END#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+#         #endregion
         
-        tab1, tab2, tab3 = st.tabs(["**Độ lệch chuẩn**", "**Bách phân vị**", "**Tứ phân vị**"])
+#         tab1, tab2, tab3 = st.tabs(["**Độ lệch chuẩn**", "**Bách phân vị**", "**Tứ phân vị**"])
         
-        def select_outliers(outliers, column):
-            st.write('Tổng số outliers:', len(outliers))
-            st.write('Phần trăm outliers:', round(len(outliers)/len(data[column])*100,2),'%')
-            st.write('Số lượng các giá trị là outliers:', outliers.nunique())
-            st.write('Các giá trị outliers:')
-            st.code(str(sorted(outliers.unique())))
-            st.write('Tần suất của mỗi outliers:')
-            fre = data[column].value_counts().loc[outliers.unique()].to_frame().sort_values(column, ascending=False)
-            fre.columns = ['Tần suất']
-            st.dataframe(fre.T)
-            # st.dataframe(data[column].value_counts().loc[outliers.unique()].to_frame().sort_index().T)
+#         def select_outliers(outliers, column):
+#             st.write('Tổng số outliers:', len(outliers))
+#             st.write('Phần trăm outliers:', round(len(outliers)/len(data[column])*100,2),'%')
+#             st.write('Số lượng các giá trị là outliers:', outliers.nunique())
+#             st.write('Các giá trị outliers:')
+#             st.code(str(sorted(outliers.unique())))
+#             st.write('Tần suất của mỗi outliers:')
+#             fre = data[column].value_counts().loc[outliers.unique()].to_frame().sort_values(column, ascending=False)
+#             fre.columns = ['Tần suất']
+#             st.dataframe(fre.T)
+#             # st.dataframe(data[column].value_counts().loc[outliers.unique()].to_frame().sort_index().T)
         
-        with tab1:
-            st.write('#### Độ lệch chuẩn')
+#         with tab1:
+#             st.write('#### Độ lệch chuẩn')
             
-            ### Cách 1
-            mean = np.mean(data[column])
-            std_dev = np.std(data[column])
-            #More than 3 standard deviations from the mean an outlier
-            threshold = 3 
-            #create the condition to find outliers
-            outliers_C1 = data[column][np.abs(data[column] - mean) > threshold * std_dev]
+#             ### Cách 1
+#             mean = np.mean(data[column])
+#             std_dev = np.std(data[column])
+#             #More than 3 standard deviations from the mean an outlier
+#             threshold = 3 
+#             #create the condition to find outliers
+#             outliers_C1 = data[column][np.abs(data[column] - mean) > threshold * std_dev]
 
-            select_outliers(outliers_C1, column)
+#             select_outliers(outliers_C1, column)
         
-        with tab2:
-            st.write('#### Bách phân vị')
+#         with tab2:
+#             st.write('#### Bách phân vị')
             
-            q_low = data[column].quantile(0.01)
-            q_hi  = data[column].quantile(0.99)
-            #create the condition to find outliers
-            outliers_C2 = data[column][(q_low >  data[column]) | (data[column] > q_hi)]
+#             q_low = data[column].quantile(0.01)
+#             q_hi  = data[column].quantile(0.99)
+#             #create the condition to find outliers
+#             outliers_C2 = data[column][(q_low >  data[column]) | (data[column] > q_hi)]
 
-            select_outliers(outliers_C2, column)
+#             select_outliers(outliers_C2, column)
         
-        with tab3:
-            st.write('#### Tứ phân vị')
+#         with tab3:
+#             st.write('#### Tứ phân vị')
             
-            Q1 = data[column].quantile(0.25)
-            Q3  = data[column].quantile(0.75)
+#             Q1 = data[column].quantile(0.25)
+#             Q3  = data[column].quantile(0.75)
 
-            IQR = Q3 - Q1
-            lower = Q1 - 1.5*IQR
-            upper = Q3 + 1.5*IQR
+#             IQR = Q3 - Q1
+#             lower = Q1 - 1.5*IQR
+#             upper = Q3 + 1.5*IQR
 
-            #create the condition to find outliers
-            outliers_C3 = data[column][(lower >  data[column]) | (data[column] > upper)]
+#             #create the condition to find outliers
+#             outliers_C3 = data[column][(lower >  data[column]) | (data[column] > upper)]
             
-            select_outliers(outliers_C3, column)       
+#             select_outliers(outliers_C3, column)       
 
-        st.write('## Làm sạch outliers')
+#         st.write('## Làm sạch outliers')
         
-        st.write('#### Chọn phương pháp muốn áp dụng để loại bỏ outliers')
+#         st.write('#### Chọn phương pháp muốn áp dụng để loại bỏ outliers')
         
-        methd = st.selectbox('Phương pháp:', ["Độ lệch chuẩn", "Bách phân vị", "Tứ phân vị"])
+#         methd = st.selectbox('Phương pháp:', ["Độ lệch chuẩn", "Bách phân vị", "Tứ phân vị"])
         
-        if methd == 'Độ lệch chuẩn':
-            outliers = outliers_C1
-        elif methd == 'Bách phân vị':
-            outliers = outliers_C2
-        elif methd == 'Tứ phân vị':
-            outliers = outliers_C3  
+#         if methd == 'Độ lệch chuẩn':
+#             outliers = outliers_C1
+#         elif methd == 'Bách phân vị':
+#             outliers = outliers_C2
+#         elif methd == 'Tứ phân vị':
+#             outliers = outliers_C3  
             
-        st.write('Các outliers theo ',methd)
-        st.code(str(sorted(outliers.unique())))
-        st.write('Tổng số lượng outliers sẽ bị loại bỏ là ', len(outliers), ', chiếm ', round(len(outliers)/len(data[column])*100,2),'% dữ liệu')
+#         st.write('Các outliers theo ',methd)
+#         st.code(str(sorted(outliers.unique())))
+#         st.write('Tổng số lượng outliers sẽ bị loại bỏ là ', len(outliers), ', chiếm ', round(len(outliers)/len(data[column])*100,2),'% dữ liệu')
         
-        df_outliers = outliers.rename_axis('Id').reset_index()
+#         df_outliers = outliers.rename_axis('Id').reset_index()
         
-        st.write('**Vị trí các outliers trong dữ liệu**')
+#         st.write('**Vị trí các outliers trong dữ liệu**')
             
-        st.dataframe(df_outliers)
+#         st.dataframe(df_outliers)
             
-        # if st.button("Tải outliers và vị trí"):
-        #     file_name = 'Data_outliers_'+ column + '.xlsx'
-        #     df_outliers.to_excel(file_name, index=False, engine='xlsxwriter')
-        #     st.success("Results downloaded successfully!")
+#         # if st.button("Tải outliers và vị trí"):
+#         #     file_name = 'Data_outliers_'+ column + '.xlsx'
+#         #     df_outliers.to_excel(file_name, index=False, engine='xlsxwriter')
+#         #     st.success("Results downloaded successfully!")
         
-        ### Download in Downloads folder
+#         ### Download in Downloads folder
         
-        excel_data_outlier = to_excel(df_outliers)
-        file_name_outlier = 'Data_outliers_'+ column + '.xlsx'
+#         excel_data_outlier = to_excel(df_outliers)
+#         file_name_outlier = 'Data_outliers_'+ column + '.xlsx'
         
-        if st.download_button(
-            "Tải outliers và vị trí",
-            excel_data_outlier,
-            file_name_outlier,
-            file_name_outlier,
-            key=file_name_outlier):
+#         if st.download_button(
+#             "Tải outliers và vị trí",
+#             excel_data_outlier,
+#             file_name_outlier,
+#             file_name_outlier,
+#             key=file_name_outlier):
             
-            st.success("Results downloaded successfully!")
+#             st.success("Results downloaded successfully!")
                 
-        if st.button('Xóa toàn bộ outliers', type="primary"):
-            ### Drop outliers
-            data.loc[data[column].isin(outliers.unique().tolist()), column] = None
+#         if st.button('Xóa toàn bộ outliers', type="primary"):
+#             ### Drop outliers
+#             data.loc[data[column].isin(outliers.unique().tolist()), column] = None
         
-            st.write('##### Dữ liệu sau khi làm sạch')
+#             st.write('##### Dữ liệu sau khi làm sạch')
                 
-            st.dataframe(data[[column]].describe().applymap(lambda x: f"{x:0.2f}").T)
+#             st.dataframe(data[[column]].describe().applymap(lambda x: f"{x:0.2f}").T)
         
-        # if st.button("Tải dữ liệu đã làm sạch", type="primary"):
-        #     file_name = 'Data_cleaned_'+ column + '.xlsx'
-        #     data[column].to_excel(file_name, index=False, engine='xlsxwriter')
-        #     st.success("Results downloaded successfully!")
+#         # if st.button("Tải dữ liệu đã làm sạch", type="primary"):
+#         #     file_name = 'Data_cleaned_'+ column + '.xlsx'
+#         #     data[column].to_excel(file_name, index=False, engine='xlsxwriter')
+#         #     st.success("Results downloaded successfully!")
         
-        ### Download in Downloads folder
+#         ### Download in Downloads folder
             
-        excel_data_clean = to_excel(data[column])
-        file_name_clean = 'Data_cleaned_'+ column + '.xlsx'
+#         excel_data_clean = to_excel(data[column])
+#         file_name_clean = 'Data_cleaned_'+ column + '.xlsx'
         
-        if st.download_button(
-            "Tải dữ liệu đã làm sạch",
-            excel_data_clean,
-            file_name_clean,
-            file_name_clean,
-            key=file_name_clean, type="primary"):
+#         if st.download_button(
+#             "Tải dữ liệu đã làm sạch",
+#             excel_data_clean,
+#             file_name_clean,
+#             file_name_clean,
+#             key=file_name_clean, type="primary"):
             
-            st.success("Results downloaded successfully!")
+#             st.success("Results downloaded successfully!")
             
-    elif tool_num_cle == 2:
+#     elif tool_num_cle == 2:
         
-        st.header('Làm sạch text trong trường hợp Excel không thể nhận diện 2 đoạn text giống nhau')
+#         st.header('Làm sạch text trong trường hợp Excel không thể nhận diện 2 đoạn text giống nhau')
             
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')
         
-        # st.write('#### Dữ liệu trước khi làm sạch:')
-        # st.dataframe(data.head( ))
+#         # st.write('#### Dữ liệu trước khi làm sạch:')
+#         # st.dataframe(data.head( ))
         
-        for i in data.columns:
-            # Convert data type to category
-            data[i] = data[i].astype('string')
-            # Remove tab
-            data[i] = data[i].str.replace('\t', ' ')
-            # Remove end of line characters
-            data[i] = data[i].str.replace(r'[\r\n]+', ' ')
-            # Remove multiple spaces with one space
-            data[i] = data[i].str.replace('[\s]{2,}', ' ')
-            # Some lines start with a space, remove them
-            data[i] = data[i].str.replace('^[\s]{1,}', '')
-            # Some lines end with a space, remove them
-            data[i] = data[i].str.replace('[\s]{1,}$', '')
-            data[i] = data[i].str.strip()
+#         for i in data.columns:
+#             # Convert data type to category
+#             data[i] = data[i].astype('string')
+#             # Remove tab
+#             data[i] = data[i].str.replace('\t', ' ')
+#             # Remove end of line characters
+#             data[i] = data[i].str.replace(r'[\r\n]+', ' ')
+#             # Remove multiple spaces with one space
+#             data[i] = data[i].str.replace('[\s]{2,}', ' ')
+#             # Some lines start with a space, remove them
+#             data[i] = data[i].str.replace('^[\s]{1,}', '')
+#             # Some lines end with a space, remove them
+#             data[i] = data[i].str.replace('[\s]{1,}$', '')
+#             data[i] = data[i].str.strip()
 
-        st.write('#### Dữ liệu sau khi làm sạch:')
+#         st.write('#### Dữ liệu sau khi làm sạch:')
         
-        st.dataframe(data.head( ))
+#         st.dataframe(data.head( ))
             
-        # if st.button("Tải dữ liệu đã làm sạch", type="primary"):
-        #     data.to_excel("Clean_text_data.xlsx", index=False, engine='xlsxwriter')
-        #     st.success("Results downloaded successfully!")
+#         # if st.button("Tải dữ liệu đã làm sạch", type="primary"):
+#         #     data.to_excel("Clean_text_data.xlsx", index=False, engine='xlsxwriter')
+#         #     st.success("Results downloaded successfully!")
         
-        excel_data = to_excel(data)
-        file_name = "Clean_text_data.xlsx"
+#         excel_data = to_excel(data)
+#         file_name = "Clean_text_data.xlsx"
         
-        if st.download_button(
-            "Tải dữ liệu đã làm sạch",
-            excel_data,
-            file_name,
-            file_name,
-            key=file_name, type="primary"):
+#         if st.download_button(
+#             "Tải dữ liệu đã làm sạch",
+#             excel_data,
+#             file_name,
+#             file_name,
+#             key=file_name, type="primary"):
             
-            st.success("Results downloaded successfully!")
+#             st.success("Results downloaded successfully!")
             
-    elif tool_num_cle == 3:
+#     elif tool_num_cle == 3:
         
-        st.header("Lọc các giá trị 'Khác' nằm trong Multiple Answers")
+#         st.header("Lọc các giá trị 'Khác' nằm trong Multiple Answers")
             
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')
             
-        # Hàm làm sạch dữ liệu
-        def clean_text(df):
-            for i in df.columns:
-                # Remove tab
-                df[i] = df[i].str.replace('\t', ' ')
-                # Remove end of line characters
-                df[i] = df[i].str.replace(r'[\r\n]+', ' ')
-                # Remove multiple spaces with one space
-                df[i] = df[i].str.replace('[\s]{2,}', ' ')
-                # Some lines start with a space, remove them
-                df[i] = df[i].str.replace('^[\s]{1,}', '')
-                # Some lines end with a space, remove them
-                df[i] = df[i].str.replace('[\s]{1,}$', '')
-                df[i] = df[i].str.strip()
+#         # Hàm làm sạch dữ liệu
+#         def clean_text(df):
+#             for i in df.columns:
+#                 # Remove tab
+#                 df[i] = df[i].str.replace('\t', ' ')
+#                 # Remove end of line characters
+#                 df[i] = df[i].str.replace(r'[\r\n]+', ' ')
+#                 # Remove multiple spaces with one space
+#                 df[i] = df[i].str.replace('[\s]{2,}', ' ')
+#                 # Some lines start with a space, remove them
+#                 df[i] = df[i].str.replace('^[\s]{1,}', '')
+#                 # Some lines end with a space, remove them
+#                 df[i] = df[i].str.replace('[\s]{1,}$', '')
+#                 df[i] = df[i].str.strip()
         
-        clean_text(data)
-        data.fillna('', inplace=True)
+#         clean_text(data)
+#         data.fillna('', inplace=True)
             
-        st.dataframe(data.head( ))
+#         st.dataframe(data.head( ))
         
-        st.write('**Dữ liệu bao gồm các cột:**')
-        st.code(data.columns.tolist())
+#         st.write('**Dữ liệu bao gồm các cột:**')
+#         st.code(data.columns.tolist())
         
-        st.write('#### Chọn cột chứa những giá trị có sẵn muốn loại bỏ:')
+#         st.write('#### Chọn cột chứa những giá trị có sẵn muốn loại bỏ:')
         
-        category = st.selectbox('Giá trị đã có:', data.columns.tolist())
+#         category = st.selectbox('Giá trị đã có:', data.columns.tolist())
         
-        category_to_remove = data[category].dropna().loc[lambda x: x != ''].tolist()
+#         category_to_remove = data[category].dropna().loc[lambda x: x != ''].tolist()
         
-        st.write('##### Các giá trị sẽ bị loại bỏ bao gồm:')
-        st.write(data[category].dropna().loc[lambda x: x != ''])
+#         st.write('##### Các giá trị sẽ bị loại bỏ bao gồm:')
+#         st.write(data[category].dropna().loc[lambda x: x != ''])
         
-        st.write('#### Chọn cột chứa dữ liệu hỗn hợp:')
+#         st.write('#### Chọn cột chứa dữ liệu hỗn hợp:')
         
-        column_raw = st.selectbox('Dữ liệu hỗn hợp:', data.columns.tolist())
+#         column_raw = st.selectbox('Dữ liệu hỗn hợp:', data.columns.tolist())
         
-        st.dataframe(data[column_raw])
+#         st.dataframe(data[column_raw])
         
-        # Create a regular expression pattern to match the values to remove
-        pattern = '|'.join(map(re.escape, category_to_remove))
+#         # Create a regular expression pattern to match the values to remove
+#         pattern = '|'.join(map(re.escape, category_to_remove))
         
-        name = data.columns[data.columns.get_loc(column_raw)]
+#         name = data.columns[data.columns.get_loc(column_raw)]
         
-        # if st.button("Nhấn để lọc những giá trị 'Khác'", type="primary"):
-        #region
-        #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#END#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-# This Tool was created for the Customer Research Team in the Planning Department at SaigonCo.op Union of Trading Co-operatives in January 2024 to preprocessing survey data.#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-# Author: reine_hi#0
-        #endregion    
-        # Use the pattern to remove the values from the DataFrame
-        data['Khác_'+name] = data[column_raw].apply(lambda x: re.sub(pattern, '', x))
+#         # if st.button("Nhấn để lọc những giá trị 'Khác'", type="primary"):
+#         #region
+#         #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#END#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-# This Tool was created for the Customer Research Team in the Planning Department at SaigonCo.op Union of Trading Co-operatives in January 2024 to preprocessing survey data.#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-# Author: reine_hi#0
+#         #endregion    
+#         # Use the pattern to remove the values from the DataFrame
+#         data['Khác_'+name] = data[column_raw].apply(lambda x: re.sub(pattern, '', x))
         
-        st.write('##### Dữ liệu sau khi lọc:')
-        st.dataframe(data['Khác_'+name])
+#         st.write('##### Dữ liệu sau khi lọc:')
+#         st.dataframe(data['Khác_'+name])
         
-        excel_data = to_excel(data[['Khác_'+name]])
-        file_name = 'Others_data_' + name + '.xlsx'
+#         excel_data = to_excel(data[['Khác_'+name]])
+#         file_name = 'Others_data_' + name + '.xlsx'
         
-        if st.download_button(
-            "Tải dữ liệu đã lọc",
-            excel_data,
-            file_name,
-            file_name,
-            key=file_name, type="primary"):
+#         if st.download_button(
+#             "Tải dữ liệu đã lọc",
+#             excel_data,
+#             file_name,
+#             file_name,
+#             key=file_name, type="primary"):
             
-            st.success("Results downloaded successfully!")
+#             st.success("Results downloaded successfully!")
 
-    elif tool_num_cle == 4:
+#     elif tool_num_cle == 4:
         
-        st.header("Xóa cụm/câu bất kỳ khi nó nằm xen lẫn các cụm/câu khác nhưng giữ lại nếu nó đứng riêng")
+#         st.header("Xóa cụm/câu bất kỳ khi nó nằm xen lẫn các cụm/câu khác nhưng giữ lại nếu nó đứng riêng")
             
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')
             
-        def clean_text(df):
-            for i in df.columns:
-                # Remove tab
-                df[i] = df[i].str.replace('\t', ' ')
-                # Remove end of line characters
-                df[i] = df[i].str.replace(r'[\r\n]+', ' ')
-                # Remove multiple spaces with one space
-                df[i] = df[i].str.replace('[\s]{2,}', ' ')
-                # Some lines start with a space, remove them
-                df[i] = df[i].str.replace('^[\s]{1,}', '')
-                # Some lines end with a space, remove them
-                df[i] = df[i].str.replace('[\s]{1,}$', ' ')
-                df[i] = df[i].str.strip()
+#         def clean_text(df):
+#             for i in df.columns:
+#                 # Remove tab
+#                 df[i] = df[i].str.replace('\t', ' ')
+#                 # Remove end of line characters
+#                 df[i] = df[i].str.replace(r'[\r\n]+', ' ')
+#                 # Remove multiple spaces with one space
+#                 df[i] = df[i].str.replace('[\s]{2,}', ' ')
+#                 # Some lines start with a space, remove them
+#                 df[i] = df[i].str.replace('^[\s]{1,}', '')
+#                 # Some lines end with a space, remove them
+#                 df[i] = df[i].str.replace('[\s]{1,}$', ' ')
+#                 df[i] = df[i].str.strip()
         
-        clean_text(data)
-        data.fillna('', inplace=True)
+#         clean_text(data)
+#         data.fillna('', inplace=True)
             
-        st.dataframe(data.head( ))
+#         st.dataframe(data.head( ))
         
-        st.write('**Dữ liệu bao gồm các cột:**')
-        st.code(data.columns.tolist())
+#         st.write('**Dữ liệu bao gồm các cột:**')
+#         st.code(data.columns.tolist())
         
-        st.write('#### Nhập vào cụm/câu muốn loại bỏ')
+#         st.write('#### Nhập vào cụm/câu muốn loại bỏ')
         
-        category = st.text_input('Cụm/câu')
+#         category = st.text_input('Cụm/câu')
         
-        st.write('##### Cụm/câu sẽ bị loại bỏ là:')
-        st.code(category)
+#         st.write('##### Cụm/câu sẽ bị loại bỏ là:')
+#         st.code(category)
         
-        st.write('#### Chọn cột chứa dữ liệu hỗn hợp:')
+#         st.write('#### Chọn cột chứa dữ liệu hỗn hợp:')
         
-        column_raw = st.selectbox('Dữ liệu hỗn hợp:', data.columns.tolist())
+#         column_raw = st.selectbox('Dữ liệu hỗn hợp:', data.columns.tolist())
         
-        st.dataframe(data[column_raw])
+#         st.dataframe(data[column_raw])
         
-        name = data.columns[data.columns.get_loc(column_raw)]
+#         name = data.columns[data.columns.get_loc(column_raw)]
         
-        # Remove the value '1. Chưa có nhu cầu;' from 'Feedback' column if it appears with other values
-        data['Mới_'+name] = data[column_raw].apply(lambda x: x.replace(category, '')
-                                                                            if x != category else x)
+#         # Remove the value '1. Chưa có nhu cầu;' from 'Feedback' column if it appears with other values
+#         data['Mới_'+name] = data[column_raw].apply(lambda x: x.replace(category, '')
+#                                                                             if x != category else x)
         
-        st.write('##### Dữ liệu sau khi lọc:')
-        st.dataframe(data['Mới_'+name])
+#         st.write('##### Dữ liệu sau khi lọc:')
+#         st.dataframe(data['Mới_'+name])
         
-        excel_data = to_excel(data[['Mới_'+name]])
-        file_name = 'New_data_' + name + '.xlsx'
+#         excel_data = to_excel(data[['Mới_'+name]])
+#         file_name = 'New_data_' + name + '.xlsx'
         
-        if st.download_button(
-            "Tải dữ liệu đã lọc",
-            excel_data,
-            file_name,
-            file_name,
-            key=file_name, type="primary"):
+#         if st.download_button(
+#             "Tải dữ liệu đã lọc",
+#             excel_data,
+#             file_name,
+#             file_name,
+#             key=file_name, type="primary"):
             
-            st.success("Results downloaded successfully!")
+#             st.success("Results downloaded successfully!")
             
-    elif tool_num_cle == 5:
+#     elif tool_num_cle == 5:
         
-        st.write('## Lọc và tính toán câu hỏi xếp hạng trong khảo sát')
+#         st.write('## Lọc và tính toán câu hỏi xếp hạng trong khảo sát')
         
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')
         
-        # Xóa những dòng NA
-        data = data.dropna(axis=0)
+#         # Xóa những dòng NA
+#         data = data.dropna(axis=0)
             
-        # Delimeter
-        delimiter = st.text_input('Các cụm/câu được phân tách bằng:', ';')
+#         # Delimeter
+#         delimiter = st.text_input('Các cụm/câu được phân tách bằng:', ';')
         
-        # Tách các giá trị
-        df = data.iloc[:,0].str.rsplit(delimiter, expand=True).add_prefix('A')
+#         # Tách các giá trị
+#         df = data.iloc[:,0].str.rsplit(delimiter, expand=True).add_prefix('A')
         
-        # Drop columns that have all cells containing less than 1 elements
-        df = df.loc[:, df.apply(lambda x: x.str.len() >= 1).any()]
+#         # Drop columns that have all cells containing less than 1 elements
+#         df = df.loc[:, df.apply(lambda x: x.str.len() >= 1).any()]
         
-        # Change cells containing less than 1 element to None
-        df = df.applymap(lambda x: x if len(str(x)) >= 1 else None)
+#         # Change cells containing less than 1 element to None
+#         df = df.applymap(lambda x: x if len(str(x)) >= 1 else None)
         
-        # Số lượng cột
-        num_of_col = len(df.columns)
+#         # Số lượng cột
+#         num_of_col = len(df.columns)
         
-        st.code('Dữ liệu được tách thành '+str(num_of_col)+' cột')
-        st.dataframe(df)
+#         st.code('Dữ liệu được tách thành '+str(num_of_col)+' cột')
+#         st.dataframe(df)
         
-        #Tải dữ liệu đã tách
-        excel_data_split = to_excel(df)
-        file_name_split = 'Dữ liệu đã tách.xlsx'
+#         #Tải dữ liệu đã tách
+#         excel_data_split = to_excel(df)
+#         file_name_split = 'Dữ liệu đã tách.xlsx'
         
-        if st.download_button(
-            "Tải dữ liệu đã tách",
-            excel_data_split,
-            file_name_split,
-            file_name_split,
-            key=file_name_split):
+#         if st.download_button(
+#             "Tải dữ liệu đã tách",
+#             excel_data_split,
+#             file_name_split,
+#             file_name_split,
+#             key=file_name_split):
             
-            st.success("Results downloaded successfully!")
+#             st.success("Results downloaded successfully!")
             
         
-        # Count các giá trị trong mỗi cột
-        df_count = df.agg({i:'value_counts' for i in df.columns})
+#         # Count các giá trị trong mỗi cột
+#         df_count = df.agg({i:'value_counts' for i in df.columns})
         
-        # Tạo 1 copy
-        result = df_count.copy()
+#         # Tạo 1 copy
+#         result = df_count.copy()
         
-        # Nhân các cột giá trị theo vị trí xếp hạng
-        for i, column in zip(reversed(range(num_of_col)), df_count.columns):
-            df_count[column] = df_count[column] * (i+1)
+#         # Nhân các cột giá trị theo vị trí xếp hạng
+#         for i, column in zip(reversed(range(num_of_col)), df_count.columns):
+#             df_count[column] = df_count[column] * (i+1)
             
-        # Tính tổng và tỷ lệc chọn
-        df_count['Tổng'] = df_count.sum(axis=1)
-        df_count['Tỷ lệ'] = round((df_count['Tổng']/df_count['Tổng'].sum())*100,1).astype(str) + '%'
+#         # Tính tổng và tỷ lệc chọn
+#         df_count['Tổng'] = df_count.sum(axis=1)
+#         df_count['Tỷ lệ'] = round((df_count['Tổng']/df_count['Tổng'].sum())*100,1).astype(str) + '%'
         
-        result['Tổng'] = df_count['Tổng']
-        result['Tỷ lệ'] = df_count['Tỷ lệ']
+#         result['Tổng'] = df_count['Tổng']
+#         result['Tỷ lệ'] = df_count['Tỷ lệ']
         
-        result = result.sort_values('Tổng', ascending=False)
+#         result = result.sort_values('Tổng', ascending=False)
         
-        result = result.fillna(0)
+#         result = result.fillna(0)
         
-        st.write('#### Số lần xuất hiện của các giá trị tại mỗi cột')
-        st.write("*Cột 'Tổng' là số lần xuất hiện nhân với xếp hạng theo cột của giá trị*")
+#         st.write('#### Số lần xuất hiện của các giá trị tại mỗi cột')
+#         st.write("*Cột 'Tổng' là số lần xuất hiện nhân với xếp hạng theo cột của giá trị*")
         
-        st.dataframe(result)
+#         st.dataframe(result)
         
-        # Tải kết quả
-        excel_data = to_excel(result)
-        file_name = 'Kết quả xếp hạng.xlsx'
+#         # Tải kết quả
+#         excel_data = to_excel(result)
+#         file_name = 'Kết quả xếp hạng.xlsx'
         
-        if st.download_button(
-            "Tải kết quả xếp hạng",
-            excel_data,
-            file_name,
-            file_name,
-            key=file_name, type="primary"):
+#         if st.download_button(
+#             "Tải kết quả xếp hạng",
+#             excel_data,
+#             file_name,
+#             file_name,
+#             key=file_name, type="primary"):
             
-            st.success("Results downloaded successfully!")     
+#             st.success("Results downloaded successfully!")     
 
-    elif tool_num_cle == 6:
+#     elif tool_num_cle == 6:
         
-        st.write('## Lọc và đếm các giá trị duy nhất')
+#         st.write('## Lọc và đếm các giá trị duy nhất')
         
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')   
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')   
             
-        st.write('#### Dữ liệu đầu vào')
-        st.dataframe(data)
+#         st.write('#### Dữ liệu đầu vào')
+#         st.dataframe(data)
         
-        result = data.stack().value_counts().reset_index() 
-        result.columns = ['Giá trị', 'Tần suất']
+#         result = data.stack().value_counts().reset_index() 
+#         result.columns = ['Giá trị', 'Tần suất']
         
-        st.write('#### Những giá trị duy nhất và số lượng của chúng trong dữ liệu')
-        st.dataframe(result)
+#         st.write('#### Những giá trị duy nhất và số lượng của chúng trong dữ liệu')
+#         st.dataframe(result)
         
-        # Tải kết quả
-        excel_data = to_excel(result)
-        file_name = 'Giá trị duy nhất và tần suất.xlsx'
+#         # Tải kết quả
+#         excel_data = to_excel(result)
+#         file_name = 'Giá trị duy nhất và tần suất.xlsx'
         
-        if st.download_button(
-            "Tải kết quả lọc",
-            excel_data,
-            file_name,
-            file_name,
-            key=file_name, type="primary"):
+#         if st.download_button(
+#             "Tải kết quả lọc",
+#             excel_data,
+#             file_name,
+#             file_name,
+#             key=file_name, type="primary"):
             
-            st.success("Results downloaded successfully!")  
+#             st.success("Results downloaded successfully!")  
             
-    elif tool_num_cle == 7:
+#     elif tool_num_cle == 7:
         
-        st.write('## Đếm số lần cụm từ bất kỳ xuất hiện trong dữ liệu')
+#         st.write('## Đếm số lần cụm từ bất kỳ xuất hiện trong dữ liệu')
         
-        st.write('### Chọn file áp dụng')
+#         st.write('### Chọn file áp dụng')
         
-        uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
+#         uploaded_file = st.file_uploader("Excel file:", accept_multiple_files=False)
         
-        if uploaded_file is not None:
-            data=pd.read_excel(uploaded_file)
-        else:
-            st.warning('Chưa chọn file!')   
+#         if uploaded_file is not None:
+#             data=pd.read_excel(uploaded_file)
+#         else:
+#             st.warning('Chưa chọn file!')   
             
-        st.write('#### Dữ liệu đầu vào')
-        st.dataframe(data)      
+#         st.write('#### Dữ liệu đầu vào')
+#         st.dataframe(data)      
         
-        st.write('### Nhập cụm từ cần đếm')
-        st.write(''':red[**Lưu ý:**] Nếu có từ 2 cụm trở lên, giữa mỗi cụm cách nhau bằng dấu , - Ví dụ: Hàng hóa, Nhân viên ''')
+#         st.write('### Nhập cụm từ cần đếm')
+#         st.write(''':red[**Lưu ý:**] Nếu có từ 2 cụm trở lên, giữa mỗi cụm cách nhau bằng dấu , - Ví dụ: Hàng hóa, Nhân viên ''')
         
-        text = st.text_input('Nhập cụm từ')
+#         text = st.text_input('Nhập cụm từ')
         
-        # convert input to lowercase list
-        string_list = [item.strip() for item in text.split(",")]
-        string_list_lower = [x.lower() for x in string_list]
+#         # convert input to lowercase list
+#         string_list = [item.strip() for item in text.split(",")]
+#         string_list_lower = [x.lower() for x in string_list]
         
-        # Join all columns in case there are multiple columns
-        data['col_join'] = data[data.columns[0:]].apply(lambda x: ','.join(x.dropna().astype(str)),axis=1)
+#         # Join all columns in case there are multiple columns
+#         data['col_join'] = data[data.columns[0:]].apply(lambda x: ','.join(x.dropna().astype(str)),axis=1)
         
-        # Hàm tìm cụm từ
-        def find_match_count(word: str, pattern: str) -> int:
-            return len(re.findall(pattern, word.lower()))
+#         # Hàm tìm cụm từ
+#         def find_match_count(word: str, pattern: str) -> int:
+#             return len(re.findall(pattern, word.lower()))
         
-        # Đếm số lần xuất hiện
-        for col in string_list_lower:
-            data[col] = data['col_join'].apply(find_match_count, pattern=col)
+#         # Đếm số lần xuất hiện
+#         for col in string_list_lower:
+#             data[col] = data['col_join'].apply(find_match_count, pattern=col)
         
-        result = data.drop('col_join', axis=1)
+#         result = data.drop('col_join', axis=1)
         
-        st.write('#### Kết quả')
+#         st.write('#### Kết quả')
         
-        for col in string_list_lower:
-            freq = result[col].sum()
-            st.write(f'Tổng số lần xuất hiện của **{col}** trong dữ liệu là: **{freq}**')
+#         for col in string_list_lower:
+#             freq = result[col].sum()
+#             st.write(f'Tổng số lần xuất hiện của **{col}** trong dữ liệu là: **{freq}**')
         
-        st.dataframe(result)
+#         st.dataframe(result)
         
-        # Tải kết quả
-        excel_data = to_excel(result)
-        file_name = 'Số lần cụm từ xuất hiện trong dữ liệu.xlsx'
+#         # Tải kết quả
+#         excel_data = to_excel(result)
+#         file_name = 'Số lần cụm từ xuất hiện trong dữ liệu.xlsx'
         
-        if st.download_button(
-            "Tải kết quả",
-            excel_data,
-            file_name,
-            file_name,
-            key=file_name, type="primary"):
+#         if st.download_button(
+#             "Tải kết quả",
+#             excel_data,
+#             file_name,
+#             file_name,
+#             key=file_name, type="primary"):
             
-            st.success("Results downloaded successfully!") 
+#             st.success("Results downloaded successfully!") 
 
-elif tool_num == 2:
+if tool_num == 2:
     st.write('# Trực quan hóa dữ liệu')
     
     viz_tool = left_column.selectbox(":red[**Chọn ứng dụng muốn sử dụng:**]", viz_tools)
