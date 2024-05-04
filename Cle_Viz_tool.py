@@ -42,23 +42,11 @@ st.snow()
 # Tạo cột bên trái cho menu
 left_column = st.sidebar
 
-
-tools =  ['Làm sạch dữ liệu', 'Trực quan hóa dữ liệu']
-
-cleaning_tools = ['Nhận diện và làm sạch outliers', 'Làm sạch text', 'Lọc những giá trị Khác ngoài MA', 'Xóa cụm bất kỳ', 'Lọc và tính toán câu hỏi xếp hạng',
-          'Lọc và đếm các giá trị duy nhất', 'Đếm tần suất từ/cụm từ/câu bất kỳ']
-
 viz_tools = ['Tạo mà QR và chèn logo/hình ảnh', 'Tạo Wordcloud từ tần suất']
-
-# Tạo menu dropdown list cho người dùng lựa chọn dự án
-tool = left_column.selectbox(":blue[**Chọn loại ứng dụng muốn sử dụng:**]", tools)
 
 # Logo 
 # left_column.image('https://i.imgur.com/YbVRCS1.png')
 left_column.image('./Image/SGC35_red 3.png')
-
-# Lưu trữ chỉ số index của dự án được chọn
-tool_num = tools.index(tool) + 1
 
 st.write('# Trực quan hóa dữ liệu')
 
