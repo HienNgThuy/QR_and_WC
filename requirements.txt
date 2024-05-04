@@ -9,5 +9,4 @@ scipy
 openpyxl
 XlsxWriter
 segno
-io
 wordcloud
