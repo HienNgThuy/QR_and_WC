@@ -33,9 +33,9 @@ def to_excel(df: pd.DataFrame):
     in_memory_fp.seek(0, 0)
     return in_memory_fp.read()
 
-# st.title(':rainbow[Một số công cụ làm sạch dữ liệu cơ bản] :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:')
+st.title(':rainbow[Một số công cụ làm sạch dữ liệu cơ bản] :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:')
 
-st.title(':blue[Một số công cụ làm sạch và trực quan hóa dữ liệu bằng Python]')
+# st.title(':blue[Một số công cụ làm sạch và trực quan hóa dữ liệu bằng Python]')
 
 st.snow()
 
