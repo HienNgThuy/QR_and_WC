@@ -44,7 +44,8 @@ left_column = st.sidebar
 
 viz_tools = ['Tạo mà QR và chèn logo/hình ảnh', 'Tạo Wordcloud từ tần suất']
 
-left_column.write('***Bản quyền thuộc về:*** Phòng Kế hoạch Tổng hợp - Saigon Co.op')
+left_column.write('***Bản quyền thuộc về:***')
+left_column.write('*Phòng Kế hoạch Tổng hợp - Saigon Co.op*')
 # Logo 
 # left_column.image('https://i.imgur.com/YbVRCS1.png')
 left_column.image('./Image/SGC35_red 3.png')
